@@ -46,43 +46,29 @@ module.exports = server => {
 			query = url_parts.query,
             id = query.id;
 
-            console.log('DELETE OPERATION');
-            console.log(`ID: ${id}`);
             jsonfile.readFile(coursesJsonDBFileName, function (err, coursesDb) {
                 let courseIndex;
 
                 if (err) {
-                    console.log('open courses error');
-                    console.error(err);
                     res.sendStatus(500);
                 } else {
-                    console.log('open courses success');
-                    // console.dir(coursesDb);
-                    console.log(typeof coursesDb.courses[0].id);
-                    console.log(typeof id);
                     courseIndex = coursesDb.courses.findIndex(
                         course => course.id + '' === id
                     );
 
                     if (courseIndex >= 0) {
-                        console.log(coursesDb.courses.length);
                         coursesDb.courses.splice(courseIndex, 1);
-                        console.log(coursesDb.courses.length);
                     }
 
                     jsonfile.writeFile(coursesJsonDBFileName, coursesDb, function(err) {
                         if (err) {
-                            console.log(`courses save error`);
                             res.sendStatus(500);
                         } else{
-                            console.log(`courses save success`); 
                             res.sendStatus(200);          
                         }
                     });
                 }
               });
-
-              console.log(__dirname);
     })
 
     return router;
